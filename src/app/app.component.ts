@@ -3,6 +3,8 @@ import { EarningType } from './model/earning-type';
 import { TaxResults } from './model/tax-results';
 import { UserDetails } from './model/user-details';
 import { serverApiService } from './service/server-api.service';
+import { ReactiveFormsModule ,Validators, FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import { throwError } from 'rxjs/internal/observable/throwError';
 
 @Component({
   selector: 'app-root',
@@ -13,27 +15,59 @@ export class AppComponent implements OnInit{
   title = 'TaxCalculator-Frontend';
 
   userInput: UserDetails;
-  taxResult: TaxResults[]=[];
+  taxResult: TaxResults;
 
-  constructor(private taxService: serverApiService) {
+  yearOptions = ['2021','2020'];
+  earningTypeOptions = ["Annually", "Monthly"]
 
-    this.userInput = {age:42,earningType:EarningType.ANNUALLY
-      ,medicalAidDependants:0,taxYear:2021,totalEarnings:498000};
+  taxForm: FormGroup;
+
+
+  constructor(private taxService: serverApiService,private builder: FormBuilder) {
+
+    this.taxForm = new FormGroup({  
+      grossSalary: new FormControl('498000',[Validators.required]),  
+      earningType: new FormControl('Annually',Validators.required),
+      personAge: new FormControl('25',Validators.required),
+      taxYear: new FormControl('2021',Validators.required),
+  });
+
+
+    // this.userInput = {age:42,earningsType:"Annually"
+    //   ,medicalAidDependants:0,taxYear:2021,totalEarnings:498000};
 
   }
-
-
+      
 
   ngOnInit(){
-    console.log('start');
+    
+  } 
 
-    console.log(this.userInput)
-    this.taxService.getTax(this.userInput).subscribe((userTax:UserDetails)=>{
+  send(){
 
-      console.log(userTax);
-      this.userInput=userTax;
+    this.setEarningType();
+
+    console.log(this.userInput);
+    this.taxService.getTax(this.userInput).subscribe(userTaxResults=>{
+      this.taxResult=userTaxResults;
+      console.log(userTaxResults);
     });
   }
 
+  setEarningType(){
+
+    if(this.userInput.earningsType=="Monthly"){
+
+      this.userInput.earningsType=EarningType.MONTHLY;
+
+    }
+    else if(this.userInput.earningsType=="Annually"){
+      this.userInput.earningsType=EarningType.ANNUALLY;
+    }
+    else{
+      return throwError("Invalid Period");
+    }
+
+  }
     
 }

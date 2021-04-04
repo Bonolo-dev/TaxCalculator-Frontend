@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { serverApiService } from './service/server-api.service';
 import { HttpClientModule } from '@angular/common/http';
 import { EarningType } from './model/earning-type';
+import { FormsModule, ReactiveFormsModule , FormGroup, FormControl } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import { EarningType } from './model/earning-type';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    ReactiveFormsModule
   ],
   providers: [serverApiService],
   bootstrap: [AppComponent]

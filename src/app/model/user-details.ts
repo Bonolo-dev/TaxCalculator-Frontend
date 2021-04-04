@@ -4,6 +4,6 @@ export class UserDetails {
     taxYear: number;
     age: number;
     totalEarnings: number;
-    earningType:EarningType;
+    earningsType;
     medicalAidDependants: number;
 }
