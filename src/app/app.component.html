@@ -1,11 +1,15 @@
-
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item active" aria-current="page">PAYE Calculator</li>
+  </ol>
+</nav>
 <form [formGroup]="taxForm" (ngSubmit)="send()"> 
 
-  <div class="form-group">
+  <div class="form-group ">
     <label for="grossSalary">Gross Salary</label>
     <input type="text" id="grossSalary" class="form-control" formControlName="grossSalary">
     <p class="alert alert-danger" *ngIf="taxForm.get('grossSalary').hasError('required')">              
-      Name is Required
+      Gross salary is Required
     </p>
   </div>
   
@@ -25,7 +29,10 @@
   
   <div class="form-group">
     <label for="personAge">Person Age</label>
-    <input type="text" class="form-control" id="age" formControlName="personAge">
+    <input type="text" class="form-control" id="personAge" formControlName="personAge">
+    <p class="alert alert-danger" *ngIf="taxForm.get('personAge').hasError('required')">              
+      Your age is Required
+    </p>
   </div>
   
   <div class="form-group">
@@ -33,8 +40,38 @@
     <input class="form-control" type="text" placeholder="0" readonly>
   </div>
   
-  <!--button type="button" class="btn btn-default" (click)="send()">Send</button-->
-  <button type="submit" [disabled]="!taxForm.valid">Send</button>
+  <button type="submit" class="btn btn-secondary btn-sm" [disabled]="!taxForm.valid">Calculate</button>
 </form>
 
-<!--router-outlet></router-outlet-->
+<div class="result"> 
+  <div class="card">
+    <div class="card-header">
+      PAYE RESULTS ({{printPeriod}})
+    </div>
+    <div class="card-body">
+      <table class="table table-striped">
+        <tbody>
+          <tr>
+            <td>Net Salary</td>
+            <td><span>R </span>{{taxResult.netPay}}</td>
+          </tr>
+          <tr>
+            <td>PAYE</td>
+            <td><span>R </span>{{taxResult.paye}}</td>
+          </tr>
+          <tr>
+            <td>Tax Credit</td>
+            <td><span>R </span>{{taxResult.taxCredit}}</td>
+          </tr>
+          <tr>
+            <td>PAYE (pre tax credit)</td>
+            <td><span>R </span>{{taxResult.payeRaw}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <button type="button" class="btn btn-secondary btn-sm" (click)="togglePrintPeriod()">Convert</button>
+  <span>Monthly/Annually</span>
+</div>
+

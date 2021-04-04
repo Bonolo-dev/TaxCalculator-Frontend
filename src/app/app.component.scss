@@ -7,7 +7,27 @@ select{
 }
 
 form{
+    float:left;
     width: 400px;
     margin: 50px;
     margin-left: 140px;
+}
+button{
+    margin-top: 10px;
+    margin-right: 10px;
+}
+
+span{
+    padding: auto;
+    margin-top: auto;
+    font-family: Arial, Helvetica, sans-serif;
+    color:cadetblue;
+    
+}
+
+.result{
+    font-family: arial;
+    width: width;
+    margin: 70px;
+    margin-right: 140px;
 }
