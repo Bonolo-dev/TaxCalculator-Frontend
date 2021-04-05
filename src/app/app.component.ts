@@ -47,19 +47,15 @@ export class AppComponent implements OnInit{
     this.buildUserDetails();
 
     this.taxService.getTax(this.userInput).subscribe((userTaxResults:TaxResults)=>{
-      //this.taxResult=userTaxResults;
-      this.taxResult = {
-        paye: Number((userTaxResults.paye).toFixed(2)),
-        payeRaw: Number((userTaxResults.payeRaw).toFixed(2)),
-        netPay: Number((userTaxResults.netPay).toFixed(2)),
-        taxCredit: Number((userTaxResults.taxCredit).toFixed(2))
-      }
-      
+      this.taxResult=userTaxResults;
+      this.formatTaxResults();
+     
       this.printPeriod="Annually";
     });
+    
   }
 
-  buildUserDetails(){
+  private buildUserDetails(){
 
     let earnigsEnum = 
     this.taxForm.value.earningType=="Monthly"?EarningType.MONTHLY:EarningType.ANNUALLY;
@@ -72,6 +68,17 @@ export class AppComponent implements OnInit{
       taxYear: this.taxForm.value.taxYear}
   }
 
+  private formatTaxResults(){
+
+    this.taxResult = {
+      paye: Number((this.taxResult.paye).toFixed(2)),
+      payeRaw: Number((this.taxResult.payeRaw).toFixed(2)),
+      netPay: Number((this.taxResult.netPay).toFixed(2)),
+      taxCredit: Number((this.taxResult.taxCredit).toFixed(2))
+    }
+
+  }
+
   
   togglePrintPeriod(){
 
@@ -80,26 +87,27 @@ export class AppComponent implements OnInit{
       //This is solely for display on the results table
       this.printPeriod = "Monthly";
       
-      //Fix to 2 decimal places
-      //Should have opted to use currency api
       this.taxResult = {
-        paye: Number((this.taxResult.paye/12).toFixed(2)),
-        payeRaw: Number((this.taxResult.payeRaw/12).toFixed(2)),
-        netPay: Number((this.taxResult.netPay/12).toFixed(2)),
-        taxCredit: Number((this.taxResult.taxCredit/12).toFixed(2))}
+        paye: this.taxResult.paye/12,
+        payeRaw:this.taxResult.payeRaw/12,
+        netPay: this.taxResult.netPay/12,
+        taxCredit: this.taxResult.taxCredit/12
+      }
     }
     else if(this.printPeriod=="Monthly"){
 
       this.printPeriod = "Annually";
 
-      //Fix to 2 decimal places
-      //Should have opted to use currency api
       this.taxResult = {
-        paye: Number((this.taxResult.paye*12).toFixed(2)),
-        payeRaw: Number((this.taxResult.payeRaw*12).toFixed(2)),
-        netPay: Number((this.taxResult.netPay*12).toFixed(2)),
-        taxCredit: Number((this.taxResult.taxCredit*12).toFixed(2))
+        paye: this.taxResult.paye*12,
+        payeRaw: this.taxResult.payeRaw*12,
+        netPay: this.taxResult.netPay*12,
+        taxCredit: this.taxResult.taxCredit*12
       }
     }
+
+    //Fix to 2 decimal places
+    //Should have opted to use currency api
+    this.formatTaxResults();  
   }
 }
